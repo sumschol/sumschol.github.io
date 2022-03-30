@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://pic2.zhimg.com/v2-996d3fe34757e00f47cb5ab0141e7f89_b.webp">
 <meta property="article:published_time" content="2022-03-29T04:23:14.878Z">
-<meta property="article:modified_time" content="2022-03-29T11:41:50.663Z">
+<meta property="article:modified_time" content="2022-03-30T01:32:54.209Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://pic2.zhimg.com/v2-996d3fe34757e00f47cb5ab0141e7f89_b.webp">
@@ -273,7 +273,7 @@
   
 
 <p>下面就可以构造next数组了。</p>
-<p><strong>构造next数组其实就是计算模式串s，前缀表的过程。</strong>主要分四步：</p>
+<p><strong>构造next数组其实就是计算模式串s的前缀表的过程。</strong>主要分四步：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">初始化<br>前后缀相同情况<br>前后缀不相同情况<br>记录next[i]的值<br></code></pre></td></tr></table></figure>
 
 <p><strong>初始化：</strong></p>
@@ -307,7 +307,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>, j = <span class="hljs-number">0</span>; i &lt; haystack.length(); i++)<br></code></pre></td></tr></table></figure>
 
 <p>当对应位<strong>相等</strong>时，<code>i</code>和<code>j</code>都后移，继续比较下一位</p>
-<p>当对应位<strong>不相等</strong>时，<code>j</code>根据next的值连续后移，同时<code>i</code>后移一位</p>
+<p>当对应位<strong>不相等</strong>时，<code>j</code>根据next的值连续回退，同时<code>i</code>后移一位</p>
 <p>问题：找到子串存在的条件是什么呢？</p>
 <p>当<code>j</code>移动到needle末尾时，说明<code>needle</code>中<code>j</code>之前的内容都能匹配，所以该串是一个子串，此时返回子串的起始下标即可</p>
 <p>匹配代码如下：</p>
