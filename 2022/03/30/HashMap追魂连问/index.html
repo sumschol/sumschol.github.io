@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190521153804906.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N0eWht,size_16,color_FFFFFF,t_70">
 <meta property="article:published_time" content="2022-03-30T12:34:39.890Z">
-<meta property="article:modified_time" content="2022-05-19T05:27:44.391Z">
+<meta property="article:modified_time" content="2022-08-02T08:55:52.737Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190521153804906.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N0eWht,size_16,color_FFFFFF,t_70">
@@ -269,14 +269,14 @@
 hashCode相等产生hash碰撞会调用equals方法比较内容是否相等，内容如果相等则会进行覆盖，内容如果不等则会连接到链表后方</br>
 所以我们一般选用Integer，String等不可变类作为key，不可变实体的hashCode()值在创建的时候被缓存下来，不需要重复计算；同时，Integer和String此类对象很规范的重写了hashCode()以及equals()方法，方便了put()方法调用
 </p>
+**总结以上JDK8的`put()` 方法主要流程如下：**
 
-<p><strong>总结以上JDK8的<code>put()</code> 方法主要流程如下：</strong></p>
 <figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">- 数组是否为空，若为空则调用`resize()`初始化数组<br><br>- 根据元素`key`计算hash值，并找到该元素在数组中存储的下标<br><br>- 如果该位置为空，直接将元素放入；<br><br>  如果不为空（哈希碰撞），判断该元素的`value`是否相等，<br><br>  		如果`value`相等，则覆盖掉该位置元素，<br><br>  		如果不相等，并且是链表结构，则判断是否需要扩容或树化链表，然后添加元素<br></code></pre></td></tr></table></figure>
 
 
 
 <h3 id="HashMap是如何扩容的"><a href="#HashMap是如何扩容的" class="headerlink" title="HashMap是如何扩容的"></a>HashMap是如何扩容的</h3><p>先介绍HashMap的几个基本属性：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">容量（capacity）：<span class="hljs-built_in">hash</span>表数组的大小，默认为16<br>初始化容量（initial capacity）：创建 <span class="hljs-built_in">hash</span> 表时指定的初始容量<br>尺寸（size）：当前 <span class="hljs-built_in">hash</span> 表中记录的数量<br>负载（load）：负载等于 “ size / capacity ”。负载为 0 时，表示空的 <span class="hljs-built_in">hash</span> 表。（轻负载的 <span class="hljs-built_in">hash</span> 表具有冲突少、适宜插入和查询的特点。）<br>负载因子（load <span class="hljs-built_in">factor</span>）：决定 <span class="hljs-built_in">hash</span> 表的最大填满程度，范围在 0~1，默认为 0.75 <br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">容量（capacity）：<span class="hljs-built_in">hash</span>表数组的大小，默认为16<br>初始化容量（initial capacity）：创建 <span class="hljs-built_in">hash</span> 表时指定的初始容量<br>尺寸（size）：当前 <span class="hljs-built_in">hash</span> 表中记录的数量<br>负载（load）：负载等于 “ size / capacity ”。负载为 0 时，表示空的 <span class="hljs-built_in">hash</span> 表。（轻负载的 <span class="hljs-built_in">hash</span> 表具有冲突少、适宜插入和查询的特点。）<br>负载因子（load <span class="hljs-built_in">factor</span>）：决定 <span class="hljs-built_in">hash</span> 表的最大填满程度，范围在 0~1，默认为 0.75<br></code></pre></td></tr></table></figure>
 
 <p><strong>什么时候触发扩容？</strong></p>
 <p>当首次调用put方法时，HashMap会发现table为空然后调用resize方法进行初始化，当添加完元素后，如果HashMap发现<strong>size</strong>（元素总数）大于<strong>threshold</strong>（阈值），则会调用resize方法进行扩容</p>
